@@ -46,6 +46,8 @@ public class TraceListener extends TMListener{
 					ChatModel player = new ChatModel(tcm.getPlayer());
 					player.setForegroundColor(Color.CYAN);
 					Utils.write(new ChatMessage(player, new ChatModel(" is using TMTracer too!")));
+					if(!tcm.isResponse())
+						PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.ENABLE_MESSAGE, new TraceEnableMessage(TowerMiner.player, true));
 				}
 			}
 		}
@@ -61,7 +63,7 @@ public class TraceListener extends TMListener{
 	@EventHandler
 	public void onMultiPlayerUsed(MenuUsedEvent e) {
 		if(e.getMenu() instanceof MultiPlayer) {
-			PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.ENABLE_MESSAGE, new TraceEnableMessage(TowerMiner.player));
+			PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.ENABLE_MESSAGE, new TraceEnableMessage(TowerMiner.player, false));
 		}
 	}
 
