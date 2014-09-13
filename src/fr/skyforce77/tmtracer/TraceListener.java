@@ -64,7 +64,7 @@ public class TraceListener extends TMListener{
 	@EventHandler
 	public void onMultiPlayerRendered(MenuRenderEvent e) {
 		if(e.getMenu() instanceof MultiPlayer) {
-			e.setRender(TMTracer.plugin.rendermulti);
+			e.addRender(TMTracer.plugin.rendermulti);
 		}
 	}
 	
