@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import fr.skyforce77.towerminer.TowerMiner;
 import fr.skyforce77.towerminer.api.Plugin;
 import fr.skyforce77.towerminer.api.PluginManager;
+import fr.skyforce77.towerminer.api.PluginStatus;
 import fr.skyforce77.towerminer.api.events.menu.MenuRenderEvent.RenderRunnable;
 
 
@@ -27,7 +28,7 @@ public class TMTracer extends Plugin{
 	}
 	
 	@Override
-	public void onEnable() {
+	public PluginStatus onEnable() {
 		plugin = this;
 		PluginManager.registerListener(new TraceListener());
 		rendermulti = new RenderRunnable() {
@@ -52,6 +53,7 @@ public class TMTracer extends Plugin{
 				}
 			};
 		};
+		return PluginStatus.OK;
 	}
 	
 	public static ImageIcon getTexture(String texture) {
