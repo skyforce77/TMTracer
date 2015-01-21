@@ -10,7 +10,7 @@ import fr.skyforce77.towerminer.TowerMiner;
 import fr.skyforce77.towerminer.api.Plugin;
 import fr.skyforce77.towerminer.api.PluginManager;
 import fr.skyforce77.towerminer.api.PluginStatus;
-import fr.skyforce77.towerminer.api.events.menu.MenuRenderEvent.RenderRunnable;
+import fr.skyforce77.towerminer.render.RenderRunnable;
 
 
 public class TMTracer extends Plugin{
