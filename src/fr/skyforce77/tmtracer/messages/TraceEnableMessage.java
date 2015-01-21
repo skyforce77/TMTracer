@@ -5,12 +5,12 @@ public class TraceEnableMessage extends TraceMessage{
 
 	private static final long serialVersionUID = -5844463373264112423L;
 
-	private String player;
+	private String name;
 	private boolean response;
 	
-	public TraceEnableMessage(String player, boolean response) {
+	public TraceEnableMessage(String name, boolean response) {
 		super(MessageType.ENABLE_MESSAGE);
-		this.player = player;
+		this.name = name;
 		this.response = response;
 	}
 	
@@ -18,11 +18,11 @@ public class TraceEnableMessage extends TraceMessage{
 		return response;
 	}
 
-	public String getPlayer() {
-		return player;
+	public String getName() {
+		return name;
 	}
 
-	public void setPlayer(String player) {
-		this.player = player;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

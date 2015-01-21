@@ -1,3 +1,4 @@
 name: TMTracer
 main: fr.skyforce77.tmtracer.TMTracer
 version: 0.4.1
+protocol: 2

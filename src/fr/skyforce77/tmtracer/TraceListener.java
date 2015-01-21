@@ -20,6 +20,7 @@ import fr.skyforce77.towerminer.api.events.menu.interact.mouse.MenuMouseMovedEve
 import fr.skyforce77.towerminer.menus.MultiPlayer;
 import fr.skyforce77.towerminer.protocol.chat.ChatMessage;
 import fr.skyforce77.towerminer.protocol.chat.ChatModel;
+import fr.skyforce77.towerminer.protocol.chat.MessageModel;
 
 public class TraceListener extends TMListener{
 	
@@ -29,22 +30,33 @@ public class TraceListener extends TMListener{
 			if(e.getType() == MessageType.MOVE_MESSAGE) {
 				TraceMoveMessage tcm = (TraceMoveMessage)e.getData();
 				if(TowerMiner.menu instanceof MultiPlayer) {
-					TMTracer.plugin.setOtherX(tcm.getX());
-					TMTracer.plugin.setOtherY(tcm.getY());
+					Tracer tracer = TMTracer.plugin.tracers.get(tcm.getPlayer());
+					if(tracer != null) {
+						tracer.setX(tcm.getX());
+						tracer.setY(tcm.getY());
+					}
 				}
 			} else if(e.getType() == MessageType.CLICK_MESSAGE) {
 				TraceClickMessage tcm = (TraceClickMessage)e.getData();
 				if(TowerMiner.menu instanceof MultiPlayer) {
-					TMTracer.plugin.setClickX(tcm.getX());
-					TMTracer.plugin.setClickY(tcm.getY());
-					TMTracer.plugin.setClickProgress(90);
+					Tracer tracer = TMTracer.plugin.tracers.get(tcm.getPlayer());
+					if(tracer != null) {
+						tracer.setClickX(tcm.getX());
+						tracer.setClickY(tcm.getY());
+						tracer.setClickProgress(90);
+					}
 				}
 			} else if(e.getType() == MessageType.ENABLE_MESSAGE) {
 				TraceEnableMessage tcm = (TraceEnableMessage)e.getData();
+				
+				if(!tcm.getProtocol().equals(TMTracer.plugin.getInfos().getValue("protocol")))
+					return;
+				
 				if(TowerMiner.menu instanceof MultiPlayer) {
-					TMTracer.plugin.setOtherPlayer(tcm.getPlayer());
-					ChatModel player = new ChatModel(tcm.getPlayer());
+					TMTracer.plugin.tracers.put(tcm.getPlayer(), new Tracer(tcm.getName()));
+					ChatModel player = new ChatModel(tcm.getName());
 					player.setForegroundColor(Color.CYAN);
+					player.setMouseModel(new MessageModel("v"+tcm.getProtocol()+" - "+tcm.getPlayer().toString()));
 					if(!tcm.isResponse()) {
 						PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.ENABLE_MESSAGE, new TraceEnableMessage(TowerMiner.player, true));
 						Utils.write(new ChatMessage(player, new ChatModel(" is using TMTracer too!")));
@@ -70,7 +82,7 @@ public class TraceListener extends TMListener{
 	
 	@EventHandler
 	public void onMouseClicked(MenuMouseClickedEvent event) {
-		if(TMTracer.plugin.getOtherPlayer() != null) {
+		if(!TMTracer.plugin.tracers.isEmpty()) {
 			MouseEvent e = event.getRawEvent();
 			PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.CLICK_MESSAGE, new TraceClickMessage(e.getX()-2, e.getY()-30, e.getModifiers()));
 		}
@@ -78,7 +90,7 @@ public class TraceListener extends TMListener{
 	
 	@EventHandler
 	public void onMouseMoved(MenuMouseMovedEvent event) {
-		if(TMTracer.plugin.getOtherPlayer() != null) {
+		if(!TMTracer.plugin.tracers.isEmpty()) {
 			MouseEvent e = event.getRawEvent();
 			PluginManager.sendPluginMessage(TMTracer.plugin, MessageType.MOVE_MESSAGE, new TraceMoveMessage(e.getX()-2, e.getY()-30));
 		}
